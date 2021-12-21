@@ -1,71 +1,69 @@
-use chacha20poly1305::aead::{Aead, NewAead};
-use chacha20poly1305::{ChaCha20Poly1305, Key, Nonce};
-use crypto::hkdf;
-use crypto::sha2::Sha256;
-use std::{
-    fs::self,
-    path::Path,
-};
-
-fn create_keys(password: &str, salt: &str, filename: &str) -> (Vec<u8>, Vec<u8>) {
-    let hash = Sha256::new();
-    let mut prk: Vec<u8> = vec![0; 32];
-    let mut okm: Vec<u8> = vec![0; 32];
-    let mut nonce_root: Vec<u8> = vec![0; 12];
-    hkdf::hkdf_extract(
-        hash,
-        &salt.as_bytes()[..],
-        &password.as_bytes()[..],
-        &mut prk,
-    );
-    hkdf::hkdf_expand(hash, &prk[..], &filename.as_bytes()[..], &mut okm);
-    hkdf::hkdf_expand(hash, &okm[..], &filename.as_bytes()[..], &mut nonce_root);
-    (okm, nonce_root)
-}
-
-fn encrypt_file<T: Clone + AsRef<Path>>(filepath: T, password: &str, salt: &str) -> Result<(), std::io::Error> {
-    let (okm, nonce_root) = create_keys(
-        password,
-        salt,
-        Path::new(filepath.as_ref()).file_stem().unwrap().to_str().unwrap(),
-    );
-    let cipher = ChaCha20Poly1305::new(Key::from_slice(&okm));
-    let nonce = Nonce::from_slice(nonce_root.as_ref());
-
-    let output = filepath.clone();
-    let data = fs::read(filepath)?;
-    let ciphertext = cipher
-        .encrypt(nonce.into(), data.as_ref())
-        .expect("encryption failure!");
-
-    fs::write(&output, ciphertext)?;
-    Ok(())
-}
-
-fn decrypt_file<T: Clone + AsRef<Path>>(filepath: T, password: &str, salt: &str) -> Result<(), std::io::Error> {
-    let (okm, nonce_root) = create_keys(
-        password,
-        salt,
-        Path::new(filepath.as_ref()).file_stem().unwrap().to_str().unwrap(),
-    );
-    let cipher = ChaCha20Poly1305::new(Key::from_slice(&okm));
-    let nonce = Nonce::from_slice(nonce_root.as_ref());
-
-    let output = filepath.clone();
-    let data = fs::read(filepath)?;
-    let plaintext = cipher
-        .decrypt(nonce.into(), data.as_ref())
-        .expect("Decryption failure!");
-
-    fs::write(&output, plaintext)?;
-    Ok(())
-}
+use clap::{App, Arg};
+mod core;
 
 fn main() {
-    let pass = "hello";
-    let salt = "world";
-    let file = "testfile.txt";
+    let args = App::new("Saltcrypt")
+        .version("0.1.0")
+        .about("In-place file encryption/decryption tool")
+        .author("Mikko Kolehmainen")
+        .arg(
+            Arg::with_name("filepath")
+                .index(1)
+                .short("f")
+                .long("filepath")
+                .takes_value(true)
+                .required(true)
+                .requires("password")
+                .help("Path to a file to be encrypted/decrypted"),
+        )
+        .arg(
+            Arg::with_name("password")
+                .index(2)
+                .short("p")
+                .long("password")
+                .takes_value(true)
+                .required(true)
+                .requires("salt")
+                .help("Password to be used"),
+        )
+        .arg(
+            Arg::with_name("salt")
+                .index(3)
+                .short("s")
+                .long("salt")
+                .takes_value(true)
+                .required(true)
+                .requires("mode")
+                .help("Salt to be used for extra security"),
+        )
+        .arg(
+            Arg::with_name("mode")
+                .index(4)
+                .possible_values(&["e", "d"])
+                .required(true)
+                .help("Choose encryption or decryption mode"),
+        )
+        .get_matches();
 
-    encrypt_file(file, pass, salt).unwrap();
-    decrypt_file(file, pass, salt).unwrap();
+    if args.is_present("filepath") {
+        match args.value_of("mode").unwrap() {
+            "e" => {
+                core::encrypt_file(
+                    args.value_of("filepath").unwrap(),
+                    args.value_of("password").unwrap(),
+                    args.value_of("salt").unwrap(),
+                )
+                .unwrap();
+            }
+            "d" => {
+                core::decrypt_file(
+                    args.value_of("filepath").unwrap(),
+                    args.value_of("password").unwrap(),
+                    args.value_of("salt").unwrap(),
+                )
+                .unwrap();
+            }
+            _ => unreachable!(),
+        }
+    }
 }
