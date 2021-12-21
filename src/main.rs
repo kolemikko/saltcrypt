@@ -45,25 +45,23 @@ fn main() {
         )
         .get_matches();
 
-    if args.is_present("filepath") {
-        match args.value_of("mode").unwrap() {
-            "e" => {
-                core::encrypt_file(
-                    args.value_of("filepath").unwrap(),
-                    args.value_of("password").unwrap(),
-                    args.value_of("salt").unwrap(),
-                )
-                .unwrap();
-            }
-            "d" => {
-                core::decrypt_file(
-                    args.value_of("filepath").unwrap(),
-                    args.value_of("password").unwrap(),
-                    args.value_of("salt").unwrap(),
-                )
-                .unwrap();
-            }
-            _ => unreachable!(),
+    match args.value_of("mode").unwrap() {
+        "e" => {
+            core::encrypt_file(
+                args.value_of("filepath").unwrap(),
+                args.value_of("password").unwrap(),
+                args.value_of("salt").unwrap(),
+            )
+            .unwrap();
         }
+        "d" => {
+            core::decrypt_file(
+                args.value_of("filepath").unwrap(),
+                args.value_of("password").unwrap(),
+                args.value_of("salt").unwrap(),
+            )
+            .unwrap();
+        }
+        _ => unreachable!(),
     }
 }
