@@ -23,7 +23,7 @@ fn create_keys(password: &str, salt: &str, filename: &str) -> (Vec<u8>, Vec<u8>)
     (okm, nonce_root)
 }
 
-fn encrypt_file<T: Clone + AsRef<Path>>(filepath: T, password: &str, salt: &str) {
+fn encrypt_file<T: Clone + AsRef<Path>>(filepath: T, password: &str, salt: &str) -> Result<(), std::io::Error> {
     let (okm, nonce_root) = create_keys(
         password,
         salt,
@@ -33,15 +33,16 @@ fn encrypt_file<T: Clone + AsRef<Path>>(filepath: T, password: &str, salt: &str)
     let nonce = Nonce::from_slice(nonce_root.as_ref());
 
     let output = filepath.clone();
-    let data = fs::read(filepath).unwrap();
+    let data = fs::read(filepath)?;
     let ciphertext = cipher
         .encrypt(nonce.into(), data.as_ref())
         .expect("encryption failure!");
 
-    fs::write(&output, ciphertext);
+    fs::write(&output, ciphertext)?;
+    Ok(())
 }
 
-fn decrypt_file<T: Clone + AsRef<Path>>(filepath: T, password: &str, salt: &str) {
+fn decrypt_file<T: Clone + AsRef<Path>>(filepath: T, password: &str, salt: &str) -> Result<(), std::io::Error> {
     let (okm, nonce_root) = create_keys(
         password,
         salt,
@@ -51,12 +52,13 @@ fn decrypt_file<T: Clone + AsRef<Path>>(filepath: T, password: &str, salt: &str)
     let nonce = Nonce::from_slice(nonce_root.as_ref());
 
     let output = filepath.clone();
-    let data = fs::read(filepath).unwrap();
+    let data = fs::read(filepath)?;
     let plaintext = cipher
         .decrypt(nonce.into(), data.as_ref())
         .expect("Decryption failure!");
 
-    fs::write(&output, plaintext);
+    fs::write(&output, plaintext)?;
+    Ok(())
 }
 
 fn main() {
@@ -64,6 +66,6 @@ fn main() {
     let salt = "world";
     let file = "testfile.txt";
 
-    encrypt_file(file, pass, salt);
-    decrypt_file(file, pass, salt);
+    encrypt_file(file, pass, salt).unwrap();
+    decrypt_file(file, pass, salt).unwrap();
 }
