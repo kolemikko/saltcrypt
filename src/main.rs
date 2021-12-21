@@ -1,9 +1,9 @@
-use clap::{App, Arg};
+use clap::{crate_version, App, Arg};
 mod core;
 
 fn main() {
     let args = App::new("Saltcrypt")
-        .version("0.1.0")
+        .version(crate_version!())
         .about("In-place file encryption/decryption tool")
         .author("Mikko Kolehmainen")
         .arg(
