@@ -20,7 +20,7 @@ fn create_keys(password: &str, salt: &str, filename: &str) -> (Vec<u8>, Vec<u8>)
     (okm, nonce_root)
 }
 
-pub fn encrypt_file<T: Clone + AsRef<Path>>(
+pub fn encrypt_file<T: AsRef<Path>>(
     filepath: T,
     password: &str,
     salt: &str,
@@ -36,18 +36,16 @@ pub fn encrypt_file<T: Clone + AsRef<Path>>(
     );
     let cipher = ChaCha20Poly1305::new(Key::from_slice(&okm));
     let nonce = Nonce::from_slice(nonce_root.as_ref());
-
-    let output = filepath.clone();
-    let data = fs::read(filepath)?;
+    let data = fs::read(&filepath)?;
     let ciphertext = cipher
         .encrypt(nonce.into(), data.as_ref())
         .expect("encryption failure!");
 
-    fs::write(&output, ciphertext)?;
+    fs::write(&filepath, ciphertext)?;
     Ok(())
 }
 
-pub fn decrypt_file<T: Clone + AsRef<Path>>(
+pub fn decrypt_file<T: AsRef<Path>>(
     filepath: T,
     password: &str,
     salt: &str,
@@ -64,12 +62,11 @@ pub fn decrypt_file<T: Clone + AsRef<Path>>(
     let cipher = ChaCha20Poly1305::new(Key::from_slice(&okm));
     let nonce = Nonce::from_slice(nonce_root.as_ref());
 
-    let output = filepath.clone();
-    let data = fs::read(filepath)?;
+    let data = fs::read(&filepath)?;
     let plaintext = cipher
         .decrypt(nonce.into(), data.as_ref())
         .expect("Decryption failure!");
 
-    fs::write(&output, plaintext)?;
+    fs::write(&filepath, plaintext)?;
     Ok(())
 }
