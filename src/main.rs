@@ -11,7 +11,7 @@ fn main() {
                 .index(1)
                 .possible_values(&["e", "d"])
                 .requires("filepath")
-                .help("Choose encryption or decryption mode"),
+                .help("Encryption or decryption mode"),
         )
         .arg(
             Arg::with_name("filepath")
@@ -20,7 +20,7 @@ fn main() {
                 .long("filepath")
                 .takes_value(true)
                 .requires("password")
-                .help("Path to a file"),
+                .help("Path to file"),
         )
         .arg(
             Arg::with_name("password")
@@ -45,24 +45,34 @@ fn main() {
     if args.is_present("mode") {
         match args.value_of("mode").unwrap() {
             "e" => {
-                core::encrypt_file(
+                match core::encrypt_file(
                     args.value_of("filepath").unwrap(),
                     args.value_of("password").unwrap(),
                     args.value_of("salt").unwrap(),
-                )
-                .unwrap();
+                ) {
+                    Ok(_) => println!(
+                        "{} encrypted successfully!",
+                        args.value_of("filepath").unwrap()
+                    ),
+                    Err(error) => println!("Couldn't encrypt the file!\n{}", error),
+                };
             }
             "d" => {
-                core::decrypt_file(
+                match core::decrypt_file(
                     args.value_of("filepath").unwrap(),
                     args.value_of("password").unwrap(),
                     args.value_of("salt").unwrap(),
-                )
-                .unwrap();
+                ) {
+                    Ok(_) => println!(
+                        "{} decrypted successfully!",
+                        args.value_of("filepath").unwrap()
+                    ),
+                    Err(error) => println!("Couldn't decrypt the file!\n{}", error),
+                };
             }
             _ => unreachable!(),
         }
     } else {
-        println!("Should start gui here");
+        println!("Should start gui now!");
     }
 }
