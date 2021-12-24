@@ -10,6 +10,8 @@ pub enum CoreError {
     Aead(aead::Error),
 }
 
+impl std::error::Error for CoreError {}
+
 impl From<std::io::Error> for CoreError {
     fn from(err: std::io::Error) -> CoreError {
         CoreError::Io(err)
