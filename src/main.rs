@@ -1,5 +1,6 @@
 use clap::{crate_version, App, Arg};
 mod core;
+mod gui;
 
 fn main() {
     let args = App::new("Saltcrypt")
@@ -73,6 +74,6 @@ fn main() {
             _ => unreachable!(),
         }
     } else {
-        println!("Should start gui now!");
+        gui::run::start();
     }
 }

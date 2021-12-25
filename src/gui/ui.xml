@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkApplicationWindow" id="window">
+    <property name="title">Saltcrypt</property>
+    <property name="default-width">300</property>
+    <property name="default-height">300</property>
+    <child>
+      <object class="GtkGrid" id="grid">
+	<child>
+	  <object class="GtkCheckButton" id="enc_mode_button">
+            <property name="label">Encrypt</property>
+	    <property name="active">TRUE</property>
+	    <layout>
+		<property name="column">0</property>
+		<property name="row">0</property>
+	    </layout>
+            <property name="margin-top">8</property>
+            <property name="margin-bottom">8</property>
+            <property name="margin-start">2</property>
+            <property name="margin-end">2</property>
+	  </object>
+	</child>
+	<child>
+	  <object class="GtkCheckButton" id="dec_mode_button">
+            <property name="label">Decrypt</property>
+	    <layout>
+		<property name="column">1</property>
+		<property name="row">0</property>
+	    </layout>
+            <property name="margin-top">8</property>
+            <property name="margin-bottom">8</property>
+            <property name="margin-start">2</property>
+            <property name="margin-end">2</property>
+	  </object>
+	</child>
+	<child>
+	  <object class="GtkFrame" id="labelbox">
+	    <property name="height-request">50</property>
+	    <property name="width-request">280</property>
+	    <property name="margin-top">8</property>
+	    <property name="margin-bottom">8</property>
+	    <property name="margin-start">8</property>
+	    <property name="margin-end">8</property>
+	    <layout>
+		<property name="column">0</property>
+		<property name="row">1</property>
+		<property name="column-span">2</property>
+		</layout>
+	    <child>
+	    <object class="GtkLabel" id="file_view">
+		<property name="wrap">TRUE</property>
+	    </object>
+	    </child>
+	    </object>
+	</child>
+	<child>
+	  <object class="GtkButton" id="open_button">
+            <property name="label">Choose a file</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">22</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+	    <layout>
+		<property name="column">0</property>
+		<property name="row">2</property>
+		<property name="column-span">2</property>
+	    </layout>
+	  </object>
+	</child>
+	<child>
+	  <object class="GtkPasswordEntry" id="password_entry">
+	    <property name="show-peek-icon">TRUE</property>
+	    <property name="placeholder-text">Password</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+	    <layout>
+		<property name="column">0</property>
+		<property name="row">3</property>
+		<property name="column-span">2</property>
+	    </layout>
+	  </object>
+	</child>
+	<child>
+	  <object class="GtkPasswordEntry" id="salt_entry">
+	    <property name="show-peek-icon">TRUE</property>
+	    <property name="placeholder-text">Salt</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+	    <layout>
+		<property name="column">0</property>
+		<property name="row">4</property>
+		<property name="column-span">2</property>
+	    </layout>
+	  </object>
+	</child>
+	<child>
+	  <object class="GtkButton" id="execute_button">
+            <property name="label">Execute</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+	    <layout>
+		<property name="column">0</property>
+		<property name="row">5</property>
+		<property name="column-span">2</property>
+	    </layout>
+	  </object>
+	</child>
+	<child>
+	    <object class="GtkStatusbar" id="statusbar">
+	    <layout>
+		<property name="column">0</property>
+		<property name="row">6</property>
+		<property name="column-span">2</property>
+	    </layout>
+	    </object>
+	</child>
+      </object>
+    </child>
+  </object>
+</interface>
