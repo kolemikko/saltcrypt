@@ -84,7 +84,7 @@ fn build_ui(app: &Application) {
         dialog.show();
     }));
 
-    execute_button.connect_clicked(move |_| {
+    execute_button.connect_clicked(glib::clone!(@weak statusbar => move |_| {
         if file_view.text().is_empty() {
             statusbar.post("Please select a file first.");
         } else if password_entry.text().is_empty() || salt_entry.text().is_empty() {
@@ -124,7 +124,14 @@ fn build_ui(app: &Application) {
                 };
             }
         }
-    });
+    }));
 
     window.show();
+
+    let clear_status = move || {
+        statusbar.remove_all(statusbar.context_id("msg"));
+        glib::Continue(true)
+    };
+
+    glib::timeout_add_seconds_local(10, clear_status);
 }
