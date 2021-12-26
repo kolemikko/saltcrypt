@@ -6,6 +6,7 @@ use gtk::{
 
 pub fn start() {
     let app = Application::builder().build();
+    glib::set_program_name(Some("Saltcrypt"));
     app.connect_activate(build_ui);
     app.run();
 }
@@ -75,10 +76,7 @@ fn build_ui(app: &Application) {
 
     execute_button.connect_clicked(move |_| {
         if file_view.text().is_empty() {
-            statusbar.push(
-                statusbar.context_id("error"),
-                "Please give valid password and salt.",
-            );
+            statusbar.push(statusbar.context_id("error"), "Please select a file first.");
         } else {
             if password_entry.text().is_empty() || salt_entry.text().is_empty() {
                 statusbar.push(
