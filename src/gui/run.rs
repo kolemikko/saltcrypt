@@ -118,8 +118,8 @@ fn build_ui(app: &Application) {
                         password_entry.set_text("");
                         salt_entry.set_text("");
                     }
-                    Err(err) => {
-                        statusbar.post(&format!("Decryption failed: {}", err));
+                    Err(_) => {
+                        statusbar.post("Error: Wrong password or salt.");
                     }
                 };
             }
