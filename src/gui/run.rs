@@ -4,6 +4,16 @@ use gtk::{
     FileChooserDialog, Grid, Label, PasswordEntry, ResponseType, Statusbar,
 };
 
+trait Post {
+    fn post(&self, text: &str);
+}
+
+impl Post for Statusbar {
+    fn post(&self, text: &str) {
+        self.push(self.context_id("msg"), text);
+    }
+}
+
 pub fn start() {
     let app = Application::builder().build();
     glib::set_program_name(Some("Saltcrypt"));
@@ -76,12 +86,9 @@ fn build_ui(app: &Application) {
 
     execute_button.connect_clicked(move |_| {
         if file_view.text().is_empty() {
-            statusbar.push(statusbar.context_id("error"), "Please select a file first.");
+            statusbar.post("Please select a file first.");
         } else if password_entry.text().is_empty() || salt_entry.text().is_empty() {
-            statusbar.push(
-                statusbar.context_id("error"),
-                "Please give valid password and salt.",
-            );
+            statusbar.post("Please give valid password and salt.");
         } else {
             if enc_mode_button.is_active() {
                 match core::encrypt_file(
@@ -90,13 +97,12 @@ fn build_ui(app: &Application) {
                     &salt_entry.text(),
                 ) {
                     Ok(_) => {
-                        statusbar.push(statusbar.context_id("encrypt"), "Encrypted succesfully!");
+                        statusbar.post("Encrypted succesfully!");
                         password_entry.set_text("");
                         salt_entry.set_text("");
                     }
                     Err(err) => {
-                        let error_msg = format!("Encryption failed: {}", err);
-                        statusbar.push(statusbar.context_id("error"), &error_msg);
+                        statusbar.post(&format!("Encryption failed: {}", err));
                     }
                 };
             }
@@ -108,13 +114,12 @@ fn build_ui(app: &Application) {
                     &salt_entry.text(),
                 ) {
                     Ok(_) => {
-                        statusbar.push(statusbar.context_id("decrypt"), "Decrypted succesfully!");
+                        statusbar.post("Decrypted succesfully!");
                         password_entry.set_text("");
                         salt_entry.set_text("");
                     }
                     Err(err) => {
-                        let error_msg = format!("Decryption failed: {}", err);
-                        statusbar.push(statusbar.context_id("error"), &error_msg);
+                        statusbar.post(&format!("Decryption failed: {}", err));
                     }
                 };
             }
