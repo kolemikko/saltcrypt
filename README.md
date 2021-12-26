@@ -3,7 +3,7 @@
 Saltcrypt is a simple in-place file encryption tool using HKDF and AEAD.
 
 
-<img src="https://github.com/kolemikko/saltcrypt/blob/094cf0ef4f5d4dd8a5c3d8727efff6f1c4f73b70/doc/Screenshot.png" width=30% height=30%>
+<img src="https://github.com/kolemikko/saltcrypt/blob/0d2dc8799eb1db1c14f9d40080d42a7f134acbde/doc/screenshot.png" width=45% height=45%>
 
 
 Saltcrypt uses Key Derivation Function with HMAC-256 (HKDF) to create strong hashes out of provided password and salt, but also name of the target file. 
