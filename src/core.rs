@@ -38,14 +38,9 @@ fn create_keys(password: &str, salt: &str, filename: &str) -> (Vec<u8>, Vec<u8>)
     let mut prk: Vec<u8> = vec![0; 32];
     let mut okm: Vec<u8> = vec![0; 32];
     let mut nonce_root: Vec<u8> = vec![0; 12];
-    hkdf::hkdf_extract(
-        hash,
-        &salt.as_bytes()[..],
-        &password.as_bytes()[..],
-        &mut prk,
-    );
-    hkdf::hkdf_expand(hash, &prk[..], &filename.as_bytes()[..], &mut okm);
-    hkdf::hkdf_expand(hash, &okm[..], &filename.as_bytes()[..], &mut nonce_root);
+    hkdf::hkdf_extract(hash, salt.as_bytes(), password.as_bytes(), &mut prk);
+    hkdf::hkdf_expand(hash, &prk[..], filename.as_bytes(), &mut okm);
+    hkdf::hkdf_expand(hash, &okm[..], filename.as_bytes(), &mut nonce_root);
     (okm, nonce_root)
 }
 
@@ -66,7 +61,7 @@ pub fn encrypt_file<P: AsRef<Path>>(
     let cipher = ChaCha20Poly1305::new(Key::from_slice(&okm));
     let nonce = Nonce::from_slice(nonce_root.as_ref());
     let data = fs::read(&filepath)?;
-    let ciphertext = cipher.encrypt(nonce.into(), data.as_ref())?;
+    let ciphertext = cipher.encrypt(nonce, data.as_ref())?;
 
     fs::write(&filepath, ciphertext)?;
     Ok(())
@@ -91,7 +86,7 @@ pub fn decrypt_file<P: AsRef<Path>>(
     let nonce = Nonce::from_slice(nonce_root.as_ref());
 
     let data = fs::read(&filepath)?;
-    let plaintext = cipher.decrypt(nonce.into(), data.as_ref())?;
+    let plaintext = cipher.decrypt(nonce, data.as_ref())?;
 
     fs::write(&filepath, plaintext)?;
     Ok(())
