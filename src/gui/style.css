@@ -1,0 +1,36 @@
+window {
+    color: #EDEDEB;
+    background: #343333;
+    border-color: #4C4B4B;
+}
+
+dialog {
+    color: #EDEDEB;
+    background: #343333;
+    border-color: #4C4B4B;
+}
+checkbutton:checked {
+    /* color: brown; */
+    border-color: yellow;
+}
+
+frame {
+    /* background: black; */
+    border-color: #4C4B4B;
+}
+
+button {
+    color: #EEEEEC;
+    background: #474645;
+    border-color: #4C4B4B;
+}
+
+button:hover {
+    background-color: #545554;
+}
+
+entry {
+    color:#989898;
+    background: #1E1D1D;
+    border-color: #4C4B4B;
+}

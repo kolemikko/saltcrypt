@@ -1,7 +1,8 @@
 use crate::core;
 use gtk::{
-    glib, prelude::*, Application, ApplicationWindow, Button, CheckButton, FileChooserAction,
-    FileChooserDialog, Grid, Label, PasswordEntry, ResponseType, Statusbar,
+    gdk::Display, glib, prelude::*, Application, ApplicationWindow, Button, CheckButton,
+    CssProvider, FileChooserAction, FileChooserDialog, Grid, Label, PasswordEntry, ResponseType,
+    Statusbar, StyleContext,
 };
 
 trait Post {
@@ -17,8 +18,20 @@ impl Post for Statusbar {
 pub fn start() {
     let app = Application::builder().build();
     glib::set_program_name(Some("Saltcrypt"));
+    app.connect_startup(|_| load_css());
     app.connect_activate(build_ui);
     app.run();
+}
+
+fn load_css() {
+    let provider = CssProvider::new();
+    provider.load_from_data(include_bytes!("style.css"));
+
+    StyleContext::add_provider_for_display(
+        &Display::default().expect("Could not connect to a display."),
+        &provider,
+        gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
+    );
 }
 
 fn build_ui(app: &Application) {
