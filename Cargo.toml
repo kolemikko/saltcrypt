@@ -2,6 +2,9 @@
 name = "saltcrypt"
 version = "0.1.3"
 edition = "2021"
+authors = ["Mikko Kolehmainen"]
+description = "Easy-to-use, in-place file encryption tool using HKDF and AEAD"
+license = "MIT"
 
 [dependencies]
 rust-crypto = "0.2.36"
