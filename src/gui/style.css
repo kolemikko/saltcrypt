@@ -4,18 +4,7 @@ window {
     border-color: #4C4B4B;
 }
 
-dialog {
-    color: #EDEDEB;
-    background: #343333;
-    border-color: #4C4B4B;
-}
-checkbutton:checked {
-    /* color: brown; */
-    border-color: yellow;
-}
-
 frame {
-    /* background: black; */
     border-color: #4C4B4B;
 }
 
