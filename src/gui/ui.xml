@@ -101,7 +101,7 @@
 	  <object class="GtkButton" id="execute_button">
             <property name="label">Execute</property>
             <property name="margin-top">6</property>
-            <property name="margin-bottom">6</property>
+            <property name="margin-bottom">8</property>
             <property name="margin-start">6</property>
             <property name="margin-end">6</property>
 	    <layout>
