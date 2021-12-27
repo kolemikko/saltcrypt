@@ -1,6 +1,6 @@
 [package]
 name = "saltcrypt"
-version = "0.1.3"
+version = "0.1.5"
 edition = "2021"
 authors = ["Mikko Kolehmainen"]
 description = "Easy-to-use, in-place file encryption tool using HKDF and AEAD"
