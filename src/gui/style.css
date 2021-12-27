@@ -1,17 +1,20 @@
 window {
     color: #EDEDEB;
-    background: #343333;
-    border-color: #4C4B4B;
+    background-color: #343333;
 }
 
 frame {
     border-color: #4C4B4B;
 }
 
-button {
+button.button {
     color: #EEEEEC;
-    background: #474645;
+    background-color: #474645;
     border-color: #4C4B4B;
+}
+
+button.titlebutton {
+    background-color: #1E1D1D;
 }
 
 button:hover {
@@ -20,6 +23,6 @@ button:hover {
 
 entry {
     color:#989898;
-    background: #1E1D1D;
+    background-color: #1E1D1D;
     border-color: #4C4B4B;
 }
