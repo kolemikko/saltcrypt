@@ -1,3 +1,5 @@
+name: Release and package binaries
+
 on:
   release:
     types: [created]
