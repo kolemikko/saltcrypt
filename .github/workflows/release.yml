@@ -24,6 +24,8 @@ jobs:
 
       - name: Install dependencies
         run: sudo apt-get install libgtk-3-dev pkg-config libglib2.0-dev
+
+      - name: Set PKG_CONFIG_PATH
         run: export PKG_CONFIG_PATH=/usr/share/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig
 
       - name: Compile and release
