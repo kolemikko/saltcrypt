@@ -10,3 +10,5 @@ Even when using same gredentials, created hashes are always unique for every fil
 Original file is always overwritten with the encrypted one, because of this only reasonably sized files (= can fit in memory) are supported for now.
 
 Saltcrypt can be used as a command line tool by providing needed arguments, if no arguments are provided, graphical user interface will be started.
+
+All Saltcrypt releases can be downloaded from [here.](https://github.com/kolemikko/saltcrypt/releases)
