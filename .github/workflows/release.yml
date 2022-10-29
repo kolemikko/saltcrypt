@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Install dependencies
-        run: sudo apt-get install libgtk-4-dev build-essential
+        run: sudo apt-get install libgtk-4-dev build-essential libglib2.0-dev
 
       - name: Build and upload
         uses: rust-build/rust-build.action@v1.3.2
