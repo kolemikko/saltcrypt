@@ -23,10 +23,10 @@ jobs:
         uses: actions/checkout@master
 
       - name: Install dependencies
-        run: sudo apt-get install libgtk-4-dev build-essential libglib2.0-dev
+        run: sudo apt-get install libgtk-4-dev build-essential gir1.2-gtk-4.0
 
       - name: Build and upload
-        uses: rust-build/rust-build.action@v1.3.2
+        uses: rust-build/rust-build.action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
